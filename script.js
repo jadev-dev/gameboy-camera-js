@@ -1,8 +1,11 @@
 let textOut = document.querySelector('p');
+let virtual = document.querySelector("#workingImage")
 let display = document.querySelector("#renderedImage")
-let ctx = display.getContext('2d')
-display.width = 128
-display.height = 112
+let ctx = virtual.getContext('2d')
+virtual.width = 128
+virtual.height = 112
+display.width = 1280;
+display.height = 1120;
 
 const ditherMatrix = [
     [0, 8, 2, 10],
@@ -83,6 +86,9 @@ dlScale = 10;
 dlScaleSlider.addEventListener("input", (event)=>{
   dlScale = parseInt(event.target.value);
   dlScaleLabel.textContent = `download scale: ${dlScale}x`
+  display.width = 128 * dlScale;
+  display.height = 112 * dlScale;
+  makeImage()
 })
 
 async function updateRanges() {
@@ -100,15 +106,15 @@ function makeImage()
 {
   img().then((image) => {
         console.log(brightness);
-        console.log(display.width)
+        console.log(virtual.width)
     document.getElementById("brightnessLabel").textContent = `brightness: ${brightness}`
     document.getElementById("sizeLabel").textContent = `size: ${Math.round(size * 100)}%`
     document.getElementById("upLabel").textContent = `y-offset: ${Math.round(up)}`
     document.getElementById("rightLabel").textContent = `x-offset: ${Math.round(right)}`
     let imageWidth = image.width * size
     let imageHeight = image.height * size
-        let xpos = (display.width / 2) - (imageWidth / 2) + right;
-        let ypos = (display.height / 2) - (imageHeight / 2) - up;
+        let xpos = (virtual.width / 2) - (imageWidth / 2) + right;
+        let ypos = (virtual.height / 2) - (imageHeight / 2) - up;
       ctx.clearRect(0, 0, 128, 112);
       console.log(image, xpos, ypos, imageWidth, imageHeight)
     ctx.drawImage(image, xpos, ypos, imageWidth, imageHeight)
@@ -132,8 +138,23 @@ function makeImage()
     return imgData;
   }).then((imgData) => {
     ctx.putImageData(imgData, 0, 0);
-  });
-}
+  }).then(()=>{
+    let scaleCanvas = document.querySelector('#renderedImage');
+  let scale = scaleCanvas.getContext('2d');
+  let snip = new Image()
+  snip.src = virtual.toDataURL();
+  snip.onload = () => {
+    scaleCanvas.style.imageRendering = "pixelated";
+    let smallData = ctx.getImageData(0, 0, 128, 112)
+    for (var i = 0; i < smallData.data.length; i += 4) {
+      let x = (i / 4) % 128
+      console.log(smallData.data[i])
+      let y = Math.floor(i / (128 * 4));
+      scale.fillStyle = `rgba(${smallData.data[i]}, ${smallData.data[i + 1]}, ${smallData.data[i + 2]}, ${smallData.data[i + 3]})`
+      scale.fillRect(x * dlScale, y * dlScale, dlScale, dlScale);
+    }
+  }});}
+
 img().then((image)=>{
   size = Math.max((128/image.width), (112/image.height));
   brightnessSlider.value = 0;
@@ -177,24 +198,7 @@ let button = document.querySelector("button")
 button.addEventListener("click", (event)=>{
   let downloadLink = document.createElement("a");
   downloadLink.download = "crunched image.png";
-  let scaleCanvas = document.createElement("canvas");
-  scaleCanvas.width = 128*dlScale;
-  scaleCanvas.height = 112*dlScale;
-  let scale = scaleCanvas.getContext('2d')
-  let snip = new Image()
-  snip.src = display.toDataURL();
-  snip.onload = ()=>{
-    scaleCanvas.style.imageRendering = "pixelated";
-    let smallData = ctx.getImageData(0, 0, 128, 112)
-    for (var i = 0; i < smallData.data.length; i+=4) {
-      let x = (i / 4) % 128
-      console.log(smallData.data[i])
-      let y = Math.floor(i / (128 * 4));
-      scale.fillStyle = `rgba(${smallData.data[i]}, ${smallData.data[i+1]}, ${smallData.data[i+2]}, ${smallData.data[i+3]})`
-      scale.fillRect(x*dlScale, y*dlScale, dlScale, dlScale);
-    }
-    downloadLink.href = scaleCanvas.toDataURL();
+    downloadLink.href = display.toDataURL();
     downloadLink.click();
     downloadLink.delete();
-  };
 })
