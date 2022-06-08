@@ -211,6 +211,9 @@ let beginVideo=() => {
 navigator.mediaDevices.getUserMedia({'audio': false,'video': true}).then(function (stream) {
   window.stream = stream;
     video.srcObject = stream;
+  video.setAttribute('autoplay', '');
+  video.setAttribute('muted', '');
+  video.setAttribute('playsinline', '');
     let h = document.createElement("canvas")
     h.width = 640;
     h.height = 480;
