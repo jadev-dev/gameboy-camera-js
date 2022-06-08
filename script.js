@@ -68,7 +68,7 @@ let img = () => {
     if (userImageURL !== undefined)
       x.src = userImageURL;
     else
-      x.src = 'tux.PNG';
+      x.src = 'sood.png';
 
     x.onload = () => {
       resolve(x)
