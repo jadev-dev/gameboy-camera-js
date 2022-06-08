@@ -70,6 +70,7 @@ body {
     justify-content: center;
     align-content: center;
     flex-wrap: wrap;
+    border: 8px solid transparent;
     border-image-source: url('border.png');
     border-image-slice: 4 3 4 3;
     border-image-width: 8px 6px 8px 6px;
@@ -81,6 +82,7 @@ body {
 }
 
 .downloadHelper {
+    border: 8px solid transparent;
     border-image-source: url('border.png');
     border-image-slice: 4 3 4 3;
     border-image-width: 8px 6px 8px 6px;
@@ -112,6 +114,7 @@ body {
     display: none;
 }
 #renderedImage {
+    border: 8px solid transparent;
     border-image-source: url('border.png');
     border-image-slice: 4 3 4 3;
     border-image-width: 8px 6px 8px 6px;
