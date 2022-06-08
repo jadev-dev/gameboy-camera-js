@@ -230,8 +230,12 @@ navigator.mediaDevices.getUserMedia({'audio':false,'video':true}).then(function 
   });
 });
 }
-var x = undefined;
 let captureButton = document.querySelector("#videoButton");
+var isIphone= /(iPhone)*(OS ([7-9]|1[0-9])_)/i.test(navigator.userAgent);
+if (isIphone) {
+  captureButton.style.display = "none";
+}
+var x = undefined;
 captureButton.addEventListener("click", (event)=>{
   if (x===undefined){
     event.target.textContent = "capture image";
