@@ -207,7 +207,7 @@ browse.addEventListener("click", ()=>{
   userImage.click();
 })
 var video = document.createElement("video")
-document.appendChild(video);
+document.body.appendChild(video);
 let beginVideo=() => {
 navigator.mediaDevices.getUserMedia({'audio': false,'video': true}).then(function (stream) {
   window.stream = stream;
