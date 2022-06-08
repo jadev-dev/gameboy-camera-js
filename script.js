@@ -126,7 +126,6 @@ async function updateRanges() {
 function makeImage()
 {
   img().then((image) => {
-    console.log(image)
     document.getElementById("brightnessLabel").textContent = `brightness: ${brightness}`
     document.getElementById("sizeLabel").textContent = `size: ${Math.round(size * 100)}%`
     document.getElementById("upLabel").textContent = `y-offset: ${Math.round(up)}`
@@ -209,26 +208,31 @@ browse.addEventListener("click", ()=>{
 var video = document.createElement("video")
 document.body.appendChild(video);
 let beginVideo=() => {
-navigator.mediaDevices.getUserMedia({'audio': false,'video': {"width":{"ideal":640}, "height":{"ideal":480}}}).then(function (stream) {
+navigator.mediaDevices.getUserMedia({'audio':false,'video':true}).then(function (stream) {
   window.stream = stream;
     video.srcObject = stream;
   video.setAttribute('autoplay', '');
   video.setAttribute('muted', '');
   video.setAttribute('playsinline', '');
+
+  video.play().then(()=>{
     let h = document.createElement("canvas")
-    h.width = video.clientWidth;
-    h.height = video.clientHeight;
+    h.width = video.videoWidth;
+    h.height = video.videoHeight;
+    console.log(video)
+    console.log(video.videoWidth)
+    console.log(video.videoHeight)
     let htx = h.getContext('2d');
-    size = Math.max((128/video.clientWidth), (112/video.clientHeight));
+    size = Math.max((128/video.videoWidth), (112/video.videoHeight));
     brightnessSlider.value = 0;
     sizeSlider.value = size;
     updateRanges();
-  video.play();
-  x = setInterval(()=>{
-    htx.drawImage(video, 0, 0, video.clientWidth, video.clientHeight);
-    userImageURL = h.toDataURL();
-    makeImage();
-  }, 100)
+    x = setInterval(()=>{
+      htx.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+      userImageURL = h.toDataURL();
+      makeImage();
+    }, 100)
+  });
 });
 }
 var x = undefined;
