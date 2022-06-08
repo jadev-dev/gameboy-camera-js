@@ -215,7 +215,7 @@ let movement = (event) =>{
     }
     previousTouch = touch;
   }
-  if (event?.movementX && event?.movementY) {
+  if (event?.movementX !== undefined && event?.movementY !== undefined) {
     up -= (event.movementY * 128 / parseInt(window.getComputedStyle(display).height));
     right += (event.movementX * 112 / parseInt(window.getComputedStyle(display).width));
     updateRanges();
