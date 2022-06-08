@@ -101,6 +101,10 @@ body {
     width: 100%;
 }
 
+canvas {
+    touch-action: manipulation;
+}
+
 button, input {
     font-family: "pokemon", monospace;
 }
