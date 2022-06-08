@@ -103,3 +103,7 @@ body {
 button, input {
     font-family: "pokemon", monospace;
 }
+
+input[type=file] {
+    display:none;
+}

@@ -173,13 +173,17 @@ userImage.addEventListener("change", (event)=>{
       size = Math.max((128/image.width), (112/image.height));
       sizeSlider.value = Math.max((128/image.width), (112/image.height));
       brightnessSlider.value = 0;
-      brightness.value = 0;
+      brightness = 0;
       up = 0;
       right = 0;
       updateRanges();
       makeImage();
     })
   }
+})
+let browse = document.querySelector("#browse");
+browse.addEventListener("click", ()=>{
+  userImage.click();
 })
 let mouseEventListener;
 let movement = (event) =>{
@@ -200,5 +204,4 @@ button.addEventListener("click", (event)=>{
   downloadLink.download = "crunched image.png";
     downloadLink.href = display.toDataURL();
     downloadLink.click();
-    downloadLink.delete();
 })
