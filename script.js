@@ -231,9 +231,10 @@ navigator.mediaDevices.getUserMedia({'audio':false,'video':true}).then(function 
 });
 }
 let captureButton = document.querySelector("#videoButton");
-var isIphone= /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-if (isIphone) {
+var isIphone = /iPad|iPhone|iPod/i.test(navigator.userAgent);
+if (isIphone === true) {
   captureButton.style.display = "none";
+  captureButton.addEventListener("click", ()=>{alert("This feature does not work on iOS, as it doesn't support drawing images onto the canvas from video feeds.")})
 }
 var x = undefined;
 captureButton.addEventListener("click", (event)=>{
