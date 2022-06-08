@@ -231,7 +231,7 @@ navigator.mediaDevices.getUserMedia({'audio':false,'video':true}).then(function 
 });
 }
 let captureButton = document.querySelector("#videoButton");
-var isIphone= /(iPhone)*(OS ([7-9]|1[0-9])_)/i.test(navigator.userAgent);
+var isIphone= /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 if (isIphone) {
   captureButton.style.display = "none";
 }
