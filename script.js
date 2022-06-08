@@ -126,12 +126,15 @@ async function updateRanges() {
 function makeImage()
 {
   img().then((image) => {
+    console.log(image)
     document.getElementById("brightnessLabel").textContent = `brightness: ${brightness}`
     document.getElementById("sizeLabel").textContent = `size: ${Math.round(size * 100)}%`
     document.getElementById("upLabel").textContent = `y-offset: ${Math.round(up)}`
     document.getElementById("rightLabel").textContent = `x-offset: ${Math.round(right)}`
-    let imageWidth = image.width * size
-    let imageHeight = image.height * size
+    let imageWidth;
+    let imageHeight;
+      imageWidth = image.width * size
+      imageHeight = image.height * size
         let xpos = (virtual.width / 2) - (imageWidth / 2) + right;
         let ypos = (virtual.height / 2) - (imageHeight / 2) - up;
       ctx.clearRect(0, 0, 128, 112);
@@ -202,6 +205,39 @@ userImage.addEventListener("change", (event)=>{
 let browse = document.querySelector("#browse");
 browse.addEventListener("click", ()=>{
   userImage.click();
+})
+var video = document.createElement("video")
+let beginVideo=() => {
+navigator.mediaDevices.getUserMedia({'audio': false,'video': true}).then(function (stream) {
+  window.stream = stream;
+    video.srcObject = stream;
+    let h = document.createElement("canvas")
+    h.width = 640;
+    h.height = 480;
+    let htx = h.getContext('2d');
+    size = Math.max((128/640), (112/480));
+    brightnessSlider.value = 0;
+    sizeSlider.value = size;
+    updateRanges();
+  video.play();
+  x = setInterval(()=>{
+    htx.drawImage(video, 0, 0, 640, 480);
+    userImageURL = h.toDataURL();
+    makeImage();
+  }, 100)
+});
+}
+var x = undefined;
+let captureButton = document.querySelector("#videoButton");
+captureButton.addEventListener("click", (event)=>{
+  if (x===undefined){
+    event.target.textContent = "capture image";
+    x = beginVideo();
+  } else {
+    event.target.textContent = "start camera";
+    clearInterval(x);
+    x = undefined;
+  }
 })
 let mouseEventListener;
 let previousTouch;

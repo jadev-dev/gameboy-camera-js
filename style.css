@@ -129,15 +129,25 @@ body {
 .canvasContainer {
     justify-content: center;
     align-content: center;
-    display: flex;
+    grid-template-rows: 1fr auto;
+    grid-template-columns: 50% 50%;
+    display: grid;
     touch-action: manipulation;
     object-fit: contain;
     max-height: 100%;
     width: 100%;
 }
 
+.srcButton {
+    grid-row: 2/3;
+    width: max-content;
+    justify-self: center;
+}
+
 canvas {
+    justify-self: center;
     touch-action: none;
+    grid-column: 1/3;
 }
 
 button, input {
