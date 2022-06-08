@@ -103,7 +103,7 @@ rightSlider.addEventListener("input", (event)=>{
 let dlScaleSlider = document.querySelector("#dlScale");
 let dlScaleLabel = document.querySelector("#dlScaleLabel");
 
-dlScale = 10;
+let dlScale = 10;
 dlScaleSlider.addEventListener("input", (event)=>{
   dlScale = parseInt(event.target.value);
   dlScaleLabel.textContent = `download scale: ${dlScale}x`
