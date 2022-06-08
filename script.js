@@ -209,23 +209,23 @@ browse.addEventListener("click", ()=>{
 var video = document.createElement("video")
 document.body.appendChild(video);
 let beginVideo=() => {
-navigator.mediaDevices.getUserMedia({'audio': false,'video': true}).then(function (stream) {
+navigator.mediaDevices.getUserMedia({'audio': false,'video': {"width"{"ideal":640}, "height":{"ideal":480}}}).then(function (stream) {
   window.stream = stream;
     video.srcObject = stream;
   video.setAttribute('autoplay', '');
   video.setAttribute('muted', '');
   video.setAttribute('playsinline', '');
     let h = document.createElement("canvas")
-    h.width = 640;
-    h.height = 480;
+    h.width = video.clientWidth;
+    h.height = video.clientHeight;
     let htx = h.getContext('2d');
-    size = Math.max((128/640), (112/480));
+    size = Math.max((128/video.clientWidth), (112/video.clientHeight));
     brightnessSlider.value = 0;
     sizeSlider.value = size;
     updateRanges();
   video.play();
   x = setInterval(()=>{
-    htx.drawImage(video, 0, 0, 640, 480);
+    htx.drawImage(video, 0, 0, video.clientWidth, video.clientHeight);
     userImageURL = h.toDataURL();
     makeImage();
   }, 100)
