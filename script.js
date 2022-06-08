@@ -209,7 +209,7 @@ browse.addEventListener("click", ()=>{
 var video = document.createElement("video")
 document.body.appendChild(video);
 let beginVideo=() => {
-navigator.mediaDevices.getUserMedia({'audio': false,'video': {"width"{"ideal":640}, "height":{"ideal":480}}}).then(function (stream) {
+navigator.mediaDevices.getUserMedia({'audio': false,'video': {"width":{"ideal":640}, "height":{"ideal":480}}}).then(function (stream) {
   window.stream = stream;
     video.srcObject = stream;
   video.setAttribute('autoplay', '');
