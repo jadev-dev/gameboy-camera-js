@@ -105,8 +105,6 @@ async function updateRanges() {
 function makeImage()
 {
   img().then((image) => {
-        console.log(brightness);
-        console.log(virtual.width)
     document.getElementById("brightnessLabel").textContent = `brightness: ${brightness}`
     document.getElementById("sizeLabel").textContent = `size: ${Math.round(size * 100)}%`
     document.getElementById("upLabel").textContent = `y-offset: ${Math.round(up)}`
@@ -116,7 +114,6 @@ function makeImage()
         let xpos = (virtual.width / 2) - (imageWidth / 2) + right;
         let ypos = (virtual.height / 2) - (imageHeight / 2) - up;
       ctx.clearRect(0, 0, 128, 112);
-      console.log(image, xpos, ypos, imageWidth, imageHeight)
     ctx.drawImage(image, xpos, ypos, imageWidth, imageHeight)
         return ctx.getImageData(0, 0, 128, 112);
       }).then((imgData) => {
@@ -148,7 +145,6 @@ function makeImage()
     let smallData = ctx.getImageData(0, 0, 128, 112)
     for (var i = 0; i < smallData.data.length; i += 4) {
       let x = (i / 4) % 128
-      console.log(smallData.data[i])
       let y = Math.floor(i / (128 * 4));
       scale.fillStyle = `rgba(${smallData.data[i]}, ${smallData.data[i + 1]}, ${smallData.data[i + 2]}, ${smallData.data[i + 3]})`
       scale.fillRect(x * dlScale, y * dlScale, dlScale, dlScale);
@@ -164,7 +160,6 @@ img().then((image)=>{
 })
 let userImage = document.querySelector("#userImage")
 userImage.addEventListener("change", (event)=>{
-  console.log(event.target.files)
   if (event.target.files && event.target.files[0]) {
     if (userImageURL !== undefined)
       URL.revokeObjectURL(img.src)
@@ -186,11 +181,25 @@ browse.addEventListener("click", ()=>{
   userImage.click();
 })
 let mouseEventListener;
+let previousTouch;
 let movement = (event) =>{
-  up -= (event.movementY * 128 / parseInt(window.getComputedStyle(display).height));
-  right += (event.movementX * 112 / parseInt(window.getComputedStyle(display).width));
-  updateRanges();
-  makeImage();
+  event.preventDefault();
+  if (event?.touches) {
+    const touch = event.touches[0];
+    console.log(touch)
+    if (previousTouch) {
+      event.movementX = touch.pageX - previousTouch.pageX;
+      event.movementY = touch.pageY - previousTouch.pageY;
+    }
+    previousTouch = touch;
+  }
+  if (event?.movementX && event?.movementY) {
+    up -= (event.movementY * 128 / parseInt(window.getComputedStyle(display).height));
+    right += (event.movementX * 112 / parseInt(window.getComputedStyle(display).width));
+    updateRanges();
+    makeImage();
+  }
+
 }
 display.addEventListener("mousedown", (event)=>{
   document.addEventListener("mousemove", movement)
@@ -203,9 +212,11 @@ display.addEventListener("touchstart", (event)=>{
 })
 document.addEventListener("touchend", (event)=>{
   document.removeEventListener("touchmove", movement)
+  previousTouch = false;
 })
 document.addEventListener("touchcancel", (event)=>{
   document.removeEventListener("touchmove", movement)
+  previousTouch = false;
 })
 let button = document.querySelector("#dlButton")
 button.addEventListener("click", (event)=>{

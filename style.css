@@ -102,7 +102,7 @@ body {
 }
 
 canvas {
-    touch-action: manipulation;
+    touch-action: none;
 }
 
 button, input {
