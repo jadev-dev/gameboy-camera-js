@@ -198,6 +198,15 @@ display.addEventListener("mousedown", (event)=>{
 document.addEventListener("mouseup", (event)=>{
   document.removeEventListener("mousemove", movement)
 })
+display.addEventListener("touchstart", (event)=>{
+  document.addEventListener("touchmove", movement)
+})
+document.addEventListener("touchend", (event)=>{
+  document.removeEventListener("touchmove", movement)
+})
+document.addEventListener("touchcancel", (event)=>{
+  document.removeEventListener("touchmove", movement)
+})
 let button = document.querySelector("button")
 button.addEventListener("click", (event)=>{
   let downloadLink = document.createElement("a");

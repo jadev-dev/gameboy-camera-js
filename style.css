@@ -95,6 +95,7 @@ body {
     justify-content: center;
     align-content: center;
     display: flex;
+    touch-action: manipulation;
     object-fit: contain;
     max-height: 100%;
     width: 100%;
