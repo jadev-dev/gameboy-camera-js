@@ -2,6 +2,8 @@ let textOut = document.querySelector('p');
 let virtual = document.querySelector("#workingImage")
 let display = document.querySelector("#renderedImage")
 let ctx = virtual.getContext('2d')
+let greenModeCheckbox = document.getElementById("greenMode");
+
 virtual.width = 128
 virtual.height = 112
 display.width = 1280;
@@ -14,6 +16,25 @@ const ditherMatrix = [
     [15, 7, 13, 5],
 ]
 
+const green_dark = [15, 56, 16];
+const green_darkish = [49, 98, 47];
+const green_lightish = [138, 172, 14];
+const green_light = [154, 188, 16];
+const green_lightest = [179, 212, 18];
+
+const grays = [[0,0,0], [85,85,85], [170,170,170],[255,255,255]];
+const greens = [green_dark, green_darkish, green_lightish, green_light];
+let selectedColors;
+let inputArea = document.querySelector(".inputs");
+if (greenModeCheckbox.checked) {
+  selectedColors = greens;
+  document.body.classList.add("green-mode")
+  inputArea.classList.add("green-mode")
+} else {
+  selectedColors = grays;
+  document.body.classList.remove("green-mode")
+  inputArea.classList.remove("green-mode")
+}
 let getMapping = (x, y) => {
   return (ditherMatrix[x % 4][y % 4]/16)
 }
@@ -22,7 +43,7 @@ let naivePalette = (grayscaleValue, x, y) => {
   let calculated = grayscaleValue + ((255/16)*getMapping(x, y))
   let relative = calculated / 255;
   let rounded = Math.round(relative * 4);
-  return rounded * 63;
+  return rounded;
 }
 
 let getPixelEditorFunctions = (imgData, iteratorCount) => {
@@ -125,10 +146,12 @@ function makeImage()
       grayScaleValue += brightness;
       grayScaleValue = Math.min(Math.max(grayScaleValue, 0), 255)
       grayScaleValue = naivePalette(grayScaleValue, x, y);
+      if (grayScaleValue === 4)
+        grayScaleValue = 3;
       setPixel(
-          grayScaleValue,
-          grayScaleValue,
-          grayScaleValue,
+          selectedColors[grayScaleValue][0],
+          selectedColors[grayScaleValue][1],
+          selectedColors[grayScaleValue][2],
           255
       );
     }
@@ -186,7 +209,6 @@ let movement = (event) =>{
   event.preventDefault();
   if (event?.touches) {
     const touch = event.touches[0];
-    console.log(touch)
     if (previousTouch) {
       event.movementX = touch.pageX - previousTouch.pageX;
       event.movementY = touch.pageY - previousTouch.pageY;
@@ -218,10 +240,22 @@ document.addEventListener("touchcancel", (event)=>{
   document.removeEventListener("touchmove", movement)
   previousTouch = false;
 })
+greenModeCheckbox.addEventListener("change", (event)=>{
+  if (event.target.checked) {
+    selectedColors = greens;
+    document.body.classList.add("green-mode")
+    inputArea.classList.add("green-mode")
+  } else {
+    selectedColors = grays;
+    document.body.classList.remove("green-mode")
+    inputArea.classList.remove("green-mode")
+  }
+  makeImage();
+})
 let button = document.querySelector("#dlButton")
 button.addEventListener("click", (event)=>{
-  let downloadLink = document.createElement("a");
-  downloadLink.download = "crunched image.png";
+    let downloadLink = document.createElement("a");
+    downloadLink.download = "crunched image.png";
     downloadLink.href = display.toDataURL();
     downloadLink.click();
 })

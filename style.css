@@ -4,8 +4,11 @@
     src: url('https://tigerstyping.com/resources/gbfont.ttf') format("truetype");
 }
 html {
-    height: 100%;
+    font-size: 14pt;
+    image-rendering: pixelated;
     width: 100%;
+    margin: 1em;
+    accent-color: rgb(63, 63, 63);
 }
 body {
     overflow-x: hidden;
@@ -17,13 +20,14 @@ body {
     body {
         grid-template-columns: 100%;
         grid-template-rows: 1fr 1fr;
+        gap: 1em;
     }
     .inputs {
         grid-row: 2/3;
         grid-column: 1/2;
         width: 100%;
         box-sizing: border-box;
-        padding: 20px;
+        padding: 5px;
     }
     .inputContainer {
         width: 100%;
@@ -66,16 +70,44 @@ body {
     justify-content: center;
     align-content: center;
     flex-wrap: wrap;
+    border-image-source: url('border.png');
+    border-image-slice: 4 3 4 3;
+    border-image-width: 8px 6px 8px 6px;
+    border-image-outset: 1em;
+    margin: 1em;
+    box-sizing: border-box;
+    width: 90%;
+    background-color: white;
+}
 
+.downloadHelper {
+    border-image-source: url('border.png');
+    border-image-slice: 4 3 4 3;
+    border-image-width: 8px 6px 8px 6px;
+    border-image-outset: 1em;
+    margin: 1em;
+    box-sizing: border-box;
+}
+
+.downloadHelper>img {
+    max-width: 50vw;
+    max-height: 25vh;
+    object-fit: contain;
 }
 
 .inputContainer {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    padding: 10px;
     gap: 10px;
 }
+.inlineInputContainer {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-direction: row;
+}
+
 #workingImage {
     display: none;
 }
@@ -83,12 +115,12 @@ body {
     border-image-source: url('border.png');
     border-image-slice: 4 3 4 3;
     border-image-width: 8px 6px 8px 6px;
-    border-image-outset: 1em;
+    border-image-outset: 10px;
     margin: 1em;
     box-sizing: border-box;
     image-rendering: pixelated;
     aspect-ratio: 128 / 112;
-    width: 90%;
+    max-width: 90%;
     object-fit: contain;
 }
 .canvasContainer {
@@ -111,4 +143,48 @@ button, input {
 
 input[type=file] {
     display:none;
+}
+
+button {
+    border-image-source: url('border.png');
+    border-image-slice: 4 3 4 3;
+    border-image-width: 8px 6px 8px 6px;
+    border-image-outset: 1em;
+    font-size: inherit;
+    margin: 1em;
+    background-color: inherit;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+input[type=checkbox] {
+    padding-left: 5px;
+}
+
+.green-mode {
+    background-color: rgb(154, 188, 16) !important;
+    color: rgb(15, 56, 16) !important;
+    accent-color: rgb(15, 56, 16);
+}
+
+.inputs.green-mode.inputContainer.input[type="range"],
+.inputs.green-mode.inputContainer.input[type="range"]::-moz-range-track,
+.inputs.green-mode.inputContainer.input[type="range"]::-webkit-slider-runnable-track {
+    border-image-source: url('border.png');
+    border-image-slice: 4 3 4 3;
+    border-image-width: 8px 6px 8px 6px;
+    border-image-outset: 1em;
+    background-color: rgb(154, 188, 16);
+    -moz-appearance: none;
+    -webkit-appearance: none;
+}
+
+.inputs.green-mode,
+.inputs.green-mode>.inputContainer>button {
+    border-image-source: url("border-green.png") !important;
+}
+
+.green-mode>.canvasContainer>canvas {
+    border-image-source: url("border-green.png") !important;
+
 }
