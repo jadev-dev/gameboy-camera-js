@@ -205,16 +205,11 @@ let browse = document.querySelector("#browse");
 browse.addEventListener("click", ()=>{
   userImage.click();
 })
-var video = document.createElement("video")
-document.body.appendChild(video);
+var video = document.querySelector("video")
 let beginVideo=() => {
 navigator.mediaDevices.getUserMedia({'audio':false,'video':true}).then(function (stream) {
   window.stream = stream;
     video.srcObject = stream;
-  video.setAttribute('autoplay', '');
-  video.setAttribute('muted', '');
-  video.setAttribute('playsinline', '');
-
   video.play().then(()=>{
     let h = document.createElement("canvas")
     h.width = video.videoWidth;
