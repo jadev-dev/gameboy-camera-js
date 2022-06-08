@@ -207,7 +207,7 @@ document.addEventListener("touchend", (event)=>{
 document.addEventListener("touchcancel", (event)=>{
   document.removeEventListener("touchmove", movement)
 })
-let button = document.querySelector("button")
+let button = document.querySelector("#dlButton")
 button.addEventListener("click", (event)=>{
   let downloadLink = document.createElement("a");
   downloadLink.download = "crunched image.png";
