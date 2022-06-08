@@ -10,6 +10,7 @@ html {
 body {
     overflow-x: hidden;
     font-family: "pokemon", monospace;
+    max-width: 99vw;
 }
 
 @media (max-aspect-ratio: 1/1) {

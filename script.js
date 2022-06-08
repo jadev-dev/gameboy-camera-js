@@ -76,6 +76,14 @@ rightSlider.addEventListener("input", (event)=>{
   right = parseInt(event.target.value);
   makeImage()
 })
+let dlScaleSlider = document.querySelector("#dlScale");
+let dlScaleLabel = document.querySelector("#dlScaleLabel");
+
+dlScale = 10;
+dlScaleSlider.addEventListener("input", (event)=>{
+  dlScale = parseInt(event.target.value);
+  dlScaleLabel.textContent = `download scale: ${dlScale}x`
+})
 
 async function updateRanges() {
   img().then((image) => {
@@ -109,7 +117,7 @@ function makeImage()
     for (let i = 0; i < imgData.data.length; i += 4) {
       let [setPixel, getPixel] = getPixelEditorFunctions(imgData, i);
       let x = (i / 4) % 128
-      let y = Math.round(i / (128 * 4));
+      let y = Math.floor(i / (128 * 4));
       let grayScaleValue = (getPixel("red") + getPixel("green") + getPixel("blue")) / 3;
       grayScaleValue += brightness;
       grayScaleValue = Math.min(Math.max(grayScaleValue, 0), 255)
@@ -169,7 +177,24 @@ let button = document.querySelector("button")
 button.addEventListener("click", (event)=>{
   let downloadLink = document.createElement("a");
   downloadLink.download = "crunched image.png";
-  downloadLink.href = display.toDataURL();
-  downloadLink.click();
-  downloadLink.delete();
+  let scaleCanvas = document.createElement("canvas");
+  scaleCanvas.width = 128*dlScale;
+  scaleCanvas.height = 112*dlScale;
+  let scale = scaleCanvas.getContext('2d')
+  let snip = new Image()
+  snip.src = display.toDataURL();
+  snip.onload = ()=>{
+    scaleCanvas.style.imageRendering = "pixelated";
+    let smallData = ctx.getImageData(0, 0, 128, 112)
+    for (var i = 0; i < smallData.data.length; i+=4) {
+      let x = (i / 4) % 128
+      console.log(smallData.data[i])
+      let y = Math.floor(i / (128 * 4));
+      scale.fillStyle = `rgba(${smallData.data[i]}, ${smallData.data[i+1]}, ${smallData.data[i+2]}, ${smallData.data[i+3]})`
+      scale.fillRect(x*dlScale, y*dlScale, dlScale, dlScale);
+    }
+    downloadLink.href = scaleCanvas.toDataURL();
+    downloadLink.click();
+    downloadLink.delete();
+  };
 })
